@@ -82,14 +82,16 @@ ggplot(data = avatar_data, aes(x=imdb_rating)) +
 
 ### 2B. Formatted Histogram
 
-Here is a better formatted histogram of `imdb_rating` in using ggplot. I am improving the number of bins, adding in outlines and including a caption and better axis labels.
+Here is a better formatted histogram of `imdb_rating` in using ggplot. I am improving the number of bins, adding in outlines and including a caption, title and better axis labels.
 
-```{r, warning=FALSE, message=FALSE, echo=FALSE}
+```{r, warning=FALSE, message=FALSE, echo=FALSE, fig.cap="Histogram of IMDb rating for lines of Avatar the last Airbender TV show"}
+
 ggplot(data = avatar_data, aes(x=imdb_rating)) +
   geom_histogram(colour="blue", fill="cyan", bins=10) +
   labs(x="IMDb rating", 
        y="Number of Lines",
-       title = "Figure 1: Histogram of IMDb rating for lines of \nAvatar the last Airbender TV show") +  # Note: \n starts a new line in title   
+       title = "Frequency of IMDb rating \nAvatar the last Airbender Episodes") +  
+  # Note: \n starts a new line in title   
   theme_light()
 
 ```

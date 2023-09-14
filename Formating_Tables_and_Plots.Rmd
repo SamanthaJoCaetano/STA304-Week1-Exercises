@@ -1,0 +1,113 @@
+---
+title: "Week 1 - Formatting Tables and Plots Exercises"
+date: "Sept 14, 2023"
+author: "Sam Caetano & Emily Somerset"
+output:
+  pdf_document: default
+---
+
+# Introduction 
+
+In this document there are some demonstrations of how to improve formatting of tables and plots in the knitted pdf. Please start by knitting the document and comparing the table in Section 1A and 1B, and comparing the plot in Section 2A and 2B.
+
+```{r, message=FALSE, echo=FALSE}
+
+library(tidyverse)
+avatar_data <- read_csv("avatar.csv")
+
+```
+
+\newpage
+
+## 1. Formatting Tables Tables
+
+### 1A. Unformatted Table
+
+Here is some code to calculate the number of lines that Katara and Aang each say, and of those lines which proportion mention Appa.
+
+```{r}
+avatar_data %>% filter(character=="Aang" | character=="Katara") %>% 
+  group_by(character) %>% 
+  summarise(num_lines = n(),
+            prop_Appa = mean(mention_appa))
+
+```
+
+### 1B. Formatted Table
+
+Below is the same table but nicely formatted, we have renamed the columns and we have added a caption to the table. This is done by using the `kable()` function from the `knitr` package.
+
+```{r, echo=FALSE}
+library(knitr)
+
+avatar_data %>% filter(character=="Aang" | character=="Katara") %>% 
+  group_by(character) %>% 
+  summarise(num_lines = n(),
+            prop_Appa = mean(mention_appa)) %>% 
+  rename(`Number of lines` = num_lines, 
+         `Proportion lines mentioning Appa` = prop_Appa) %>% 
+  kable(caption = "Statistics about lines said by Aang and Katara")
+```
+
+
+\newpage
+
+### Exercise 1: Formatting a table
+
+Use 1B, to re-create a nicely formatted table in the R chunk below. Specifically, add in appropriate column names and an appropriate caption. Also, add `echo=FALSE` to the start of the r chunk to ensure the code does not appear in the formatted pdf.
+
+
+```{r}
+avatar_data %>%  
+  filter(!is.na(imdb_rating)) %>% 
+  group_by(book) %>% 
+  summarise(num_lines = n(),
+            avg_imdb = mean(imdb_rating),
+            sd_imdb = sd(imdb_rating),
+            rate_mention_appa = mean(mention_appa))
+```
+
+
+\newpage
+
+## 2. Formatting Visualizations
+
+### 2A. Unformatted Histogram
+
+Here is a basic histogram of `imdb_rating` in using ggplot:
+```{r}
+ggplot(data = avatar_data, aes(x=imdb_rating)) +
+  geom_histogram()  
+```
+
+### 2B. Formatted Histogram
+
+Here is a better formatted histogram of `imdb_rating` in using ggplot. I am improving the number of bins, adding in outlines and including a caption and better axis labels.
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE}
+ggplot(data = avatar_data, aes(x=imdb_rating)) +
+  geom_histogram(colour="blue", fill="cyan", bins=10) +
+  labs(x="IMDb rating", 
+       y="Number of Lines",
+       title = "Figure 1: Histogram of IMDb rating for lines of \nAvatar the last Airbender TV show") +  # Note: \n starts a new line in title   
+  theme_light()
+
+```
+
+More info to play with here: https://ggplot2.tidyverse.org/reference/geom_histogram.html
+
+
+\newpage
+
+### Exercise 2: Formatting a plot
+
+Use 2B, to re-create a nicely formatted bar plot using the code in the R chunk below. Add in the following axis names: "Number of Lines" and "Main Characters", as well as an appropriate caption/title. Try to change the colours and the theme of the plot as well to just improve the aesthetics. Also, add `echo=FALSE` to the start of the r chunk to ensure the code does not appear in the formatted pdf.
+
+```{r}
+avatar_data %>% 
+  filter(character=="Aang" | 
+           character == "Katara" | 
+           character == "Sokka") %>% 
+  ggplot(aes(x=character)) +
+  geom_bar()  
+```
